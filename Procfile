@@ -1,2 +1,1 @@
-web: gunicorn app:blogsite
-release: python manage.py db upgrade
+web: flask db upgrade; gunicorn run:app --preload

@@ -4,9 +4,9 @@ class Config():
     #common keys
     SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(32)
     # if 'RDS_HOSTNAME' in os.environ:
-    SQLALCHEMY_DATABASE_URI = f"postgresql://{os.environ.get('RDS_USERNAME')}:{os.environ.get('RDS_PASSWORD')}@{os.environ.get('RDS_HOSTNAME')}/{os.environ.get('RDS_DB_NAME')}"
+    # SQLALCHEMY_DATABASE_URI = f"postgresql://{os.environ.get('RDS_USERNAME')}:{os.environ.get('RDS_PASSWORD')}@{os.environ.get('RDS_HOSTNAME')}/{os.environ.get('RDS_DB_NAME')}"
     # else:
-    #     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     #aws setup
     S3_KEY = os.environ.get('S3_KEY')

@@ -26,6 +26,7 @@ awsebcli = "*"
 flask-assets = "*"
 django-htmlmin = "*"
 flask-caching = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
