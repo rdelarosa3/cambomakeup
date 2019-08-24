@@ -1,0 +1,31 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+request = "*"
+flask = "*"
+flask-sqlalchemy = "*"
+flask-wtf = "*"
+flask-bcrypt = "*"
+flask-login = "*"
+flask-mail = "*"
+pillow = "*"
+psycopg2 = "*"
+python-dotenv = "*"
+flask-migrate = "*"
+boto3 = "*"
+botocore = "*"
+werkzeug = "*"
+psycopg2-binary = "*"
+awscli = "*"
+awsebcli = "*"
+flask-assets = "*"
+django-htmlmin = "*"
+flask-caching = "*"
+
+[requires]
+python_version = "3.7"

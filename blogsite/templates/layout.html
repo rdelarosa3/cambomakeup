@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+ 	<head>
+	    <!-- Required meta tags -->
+	    <meta charset="utf-8">
+	    <meta name="keywords" content="cambodia makeup,cambodia makeup artist, phnom pehn, cambodia, best, wedding, bridal makeup, photo makeup, product, hair styling, stylist, hair, makeup, makeup artist, make-up, cambomakeup, cambodian makeup, khmer, khmer makeup">
+	    <meta name="description" content="Cambo Makeup is a premier Makeup Studio in Phnom Pehn, Cambodia. Contact us for all your makeup needs.">
+	    <meta property="og:image" content="https://s3-ap-southeast-1.amazonaws.com/cambomakeup/POTENTIAL+LOGO+(1).png" />
+	    <meta property="og:locale" content="en_US">
+	    <meta property="og:type" content="website">
+	    <meta property="og:title" content="Best Makeup Artist in Cambodia | Cambo Makeup Studio by SreyNy">
+	    <meta property="og:description" content="Cambo Makeup is a premier Makeup Studio in Phnom Pehn, Cambodia. Contact us for all your makeup needs.">
+	    <meta property="og:url" content="http://cambomakeup.com">
+	    <meta property="og:site_name" content="Cambo Makeup">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	    <link rel="canonical" href="http://cambomakeup.com">
+	    <!-- End Required meta tags -->
+	    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png')}}">
+	   	 <!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	    <!-- fontawesome CSS -->
+	    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+	    <!-- Lightbox CSS -->
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" />
+
+		<!-- Onscroll CSS -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+
+		<!-- Main App CSS -->
+		{% assets "main_css" %}
+		    <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}">
+		{% endassets %}
+		<!-- Title section -->
+		{% if title%}
+			<title>{{ title }}</title>
+		{% else %}
+			<title>Best Makeup Artist in Cambodia | Cambo Makeup Studio by SreyNy</title>
+		{% endif%}
+		<!-- End Title Section -->
+	</head>
+	<body>
+		<header class="site-header">
+
+			<!-- Navigation bar -->
+			<nav class="navbar navbar-expand-lg navbar-light fixed-top navbar-inverse bg-inverse">
+				<div class="container" id="navContain">
+					<a href='/'><img class="navbar-brand mx-auto sticky-top mr-auto" id='logo' src="https://s3-ap-southeast-1.amazonaws.com/cambomakeup/POTENTIAL+LOGO+(1).png" ></a>
+					<button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target=".navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse navbarToggle" id='dropDown'>
+						<ul class="navbar-nav ml-auto" ">
+							<li><i class="fas fa-phone fa-flip-horizontal"></i> +855 086 607 753</li>
+							<!-- Dropdown Language Toggle -->
+							<li class="nav-item lang" id="dropDownLang" style="display: none;">
+								<img class="eng-link" src="https://image.flaticon.com/icons/svg/164/164928.svg" style="width:35px;height: 35px;">
+								<img src="https://image.flaticon.com/icons/svg/168/168172.svg" class="khmer-link" style="width:35px;height: 35px;">
+							</li>
+							<!-- End Dropdown Language toggle -->
+
+						    <!-- logout user link if logged in -->
+						   	{% if current_user.is_authenticated %}
+						   		<li class="nav-item nav-link">
+						   			<a class="nav-item nav-link" href="{{ url_for('sessions.logout')}}">Logout</a>
+						   		</li>
+						   	{% else %}
+						   	<!-- login link and register if not logged in -->
+						   	<!-- <li class="nav-item nav-link"> -->
+						    	<!-- <a class="nav-item nav-link" href="{{ url_for('sessions.login')}}">Login</a> -->
+						    <!-- </li> -->
+						    <!-- <li class="nav-item nav-link"> -->
+						    	<!-- a href="{{url_for('users.register')}}">Register</a> -->
+						    <!-- </li> -->
+						    {% endif %}
+						</ul>
+						<ul class="navbar-nav ml-auto">
+							<!-- Services Link -->
+							<a href="{{url_for('main.home')+'#services'}}" id='servicesNav' style="text-decoration: none;" data-toggle="collapse" data-target=".navbar-collapse.show">
+								<li class="nav-item nav-link eng-link text-uppercase" > Services</li>
+						    	<li class="nav-item nav-link khmer-link" > សេវាកម្ម​</li>
+							</a>
+						    <!-- Wedding Info Link -->
+						    <li class="nav-item nav-link eng-link text-uppercase" > Wedding</li>
+						    <li class="nav-item nav-link khmer-link" > ពិធីមង្គលការ</li>
+						    <!-- Pricing/Booking Link + Pop up Modal-->
+						    <div data-toggle="modal" data-target="#myModal" id="pricingLink">
+						    	<li class="nav-item nav-link eng-link text-uppercase"  data-toggle="collapse" data-target=".navbar-collapse.show" >Pricing</li>
+						    	<li class="nav-item nav-link khmer-link"  data-toggle="collapse" data-target=".navbar-collapse.show">តម្លៃ</li>
+							</div>
+						    <!-- Gallery Link-->
+						    <a href="{{url_for('main.home')+'#gallery'}}" id='galleryNav' style="text-decoration: none;" data-toggle="collapse" data-target=".navbar-collapse.show">
+						    	<li class="nav-item nav-link eng-link text-uppercase"> Gallery</li>
+						    	<li class="nav-item nav-link khmer-link" > រូបថត</li>
+							</a>
+						</ul>
+						
+						<ul class="navbar-nav ml-auto" id="socialNav">
+							<!-- Social Contact buttons -->
+							<li class="nav-item"><a href="https://www.facebook.com/meth.sreyny" class="nav-link" target="_blank"><i class="fab fa-facebook-f "></i></a></li>
+							<li class="nav-item"><a href="https://www.instagram.com/sreynymet/" class="nav-link" target="_blank"><i class="fab fa-instagram "></i></a></li>
+							<li class="nav-item"><a href="https://www.youtube.com/channel/UC-pr1rHvP72VbwIuNwhwuHg" class="nav-link" target="_blank"><i class="fab fa-youtube "></i></a></li>
+							<li class="nav-item"><a href="https://www.messenger.com/t/meth.sreyny/" target="_blank" class="nav-link"><i class="fab fa-facebook-messenger "></i></a></li>
+							<!-- End Social Contact buttons -->
+
+							<!-- Language Toggle -->
+							<li class="nav-item lang">
+								<img class="eng-link" src="https://image.flaticon.com/icons/svg/164/164928.svg" style="width:35px;height: 35px;">
+								<img src="https://image.flaticon.com/icons/svg/168/168172.svg" class="khmer-link" style="width:35px;height: 35px;">
+							</li>
+							<!-- End Language Toggle -->
+						</ul>
+						
+
+						<!-- Dropdown Social Contact button -->
+						<ul class="navbar-nav" id="socialDN">
+							<li class="nav-item mt-2">
+							<a href="https://www.facebook.com/meth.sreyny" target="_blank" class="pr-4"><i class="fab fa-2x fa-facebook-f "></i></a>
+							<a href="https://www.instagram.com/sreynymet/" target="_blank" class="pr-4"><i class="fab fa-2x fa-instagram "></i></a>
+							<a href="https://www.youtube.com/channel/UC-pr1rHvP72VbwIuNwhwuHg" target="_blank" class="pr-4"><i class="fab fa-2x fa-youtube "></i></a>
+							<a href="https://www.messenger.com/t/meth.sreyny/" target="_blank" class="pr-4"><i class="fab fa-2x fa-facebook-messenger "></i></a>
+							</li>
+						</ul>
+						<!-- End Dropdown Social Contact buttons -->
+				  	</div>
+				</div>
+			</nav>
+			<!-- End Navigation Bar -->
+		</header>
+		<!-- Flash Messages screen -->
+		<main role="main" class="container mt-5">
+		  	<div class="row">
+			    <div class="col-md-8">
+			    	<!-- allows flash messages to be seen -->
+			    	{% with messages = get_flashed_messages(with_categories=true) %}
+			    		{% if messages %}
+			    			{% for category, message in messages %}
+			    				<div class='alert alert-{{ category }}'>
+
+			    					{{ message}}
+			    					
+			    				</div>
+			    			{% endfor %}
+			    		{% endif %}
+			    	{% endwith %}
+				</div>
+		  	</div>			
+		</main>
+		<!-- End Flash Messages screen -->
+
+		<!-- Side Booking Button -->
+		<div id="sideButton" style="float:none; position: fixed; top: 25%; display: block; z-index: 1000" data-toggle="modal" data-target="#myModal" >
+			<img border="none" src="https://s3-ap-southeast-1.amazonaws.com/cambomakeup/Photograpy%2BWorkshop%2B(1).png" alt="Book an appointment with Cambo Makeup" />
+		</div>
+		<!-- End Side Booking Button -->
+
+		<!-- sets the yield to bring in other templates from folder like a wrapper around your html code -->
+		{% block content %}{% endblock %}
+
+		<!--Modal: booking page -->
+		<div class="modal fade" id="myModal" tabindex="-1">
+		  	<div class="modal-dialog modal-dialog-centered">
+			    <!--Content-->
+			    <div class="modal-content" style="height: 90%;overflow: scroll; -webkit-overflow-scrolling: touch!important; width: 100%;height: 100%;">
+
+					<!--Body-->
+					<div class="modal-body mb-0 p-0">
+						<div >
+							<center><div class="pricing-loader"></div></center>
+							<iframe id="bookingFrame" style="border: 0px;width: 100%; height: 500px;" src="" scrollable="no" width="100%" height="100%"> </iframe>
+						</div>	  
+					</div>
+					<!-- footer -->
+			    	<div class="modal-footer">
+			    	 	<button type="button" class="btn btn-sm modal-buttons pull-left" id="resetBooking">Reset</button>
+						<button type="button" class="btn btn-sm modal-buttons" data-dismiss="modal">Close</button>
+					</div>
+			    </div>
+			    <!-- End Content-->
+		  </div>
+		  <!-- End Modal -->
+		</div>
+
+		<!-- Footer -->
+		<footer class="footer" id="footerScroll">
+		    <div class="container">
+		    	<div class='row'>
+			        <div class="col-md-6 text-center">
+			            <ul class="list-inline">		
+			                <li class="list-inline-item">
+			                    <a href="https://www.facebook.com/meth.sreyny" target="_blank" class="pr-4"><i class="fab fa-2x fa-facebook-f "></i></a>
+			                </li>
+			               
+			                <li class="list-inline-item">
+			                    <a href="https://www.instagram.com/sreynymet/" target="_blank" class="pr-4"><i class="fab fa-2x fa-instagram "></i></a>
+			                </li>
+			               
+			                <li class="list-inline-item">
+			                    <a href="https://www.youtube.com/channel/UC-pr1rHvP72VbwIuNwhwuHg" target="_blank" class="pr-4"><i class="fab fa-2x fa-youtube "></i></a>
+			                </li>
+			               
+			                <li class="list-inline-item">
+			                    <a href="https://www.messenger.com/t/meth.sreyny/" target="_blank" class="pr-4"><i class="fab fa-2x fa-facebook-messenger "></i></a>
+			                </li>
+			                
+			            </ul>
+			        </div>
+			             
+			        <div class="col-md-6 text-center">   
+			            <ul class="menu list-inline">
+			                <li class="list-inline-item">
+			                    <a href="#">Home</a>
+			                </li>
+			                       
+			                <li class="list-inline-item">
+			                   <a href="#about">About</a>
+			                </li>
+			                       
+			                <li class="list-inline-item">
+			                    <a href="#services">Services</a>
+			                </li>
+			                       
+			                <li class="list-inline-item">
+			                    <a href="#gallery">Gallery</a>
+			                </li>
+			                       
+			                <li class="list-inline-item">
+			                   <a href="https://www.messenger.com/t/meth.sreyny/">Contact</a>
+			                </li>
+			            </ul>
+			        </div>
+		    	</div>
+		    </div>
+	        <div class="container">
+    			<div id='copyright'>
+	            	<p class="text-uppercase text-center font-weight-bold" style="color:#b1aca1;margin:15px 0px;font-family: 'Source Sans Pro', sans-serif;">
+						<span>Copyright © 2019 All rights reserved</span>
+					</p>
+	            
+	        	</div>
+			</div>
+	    </footer>
+	    <!-- End Footer -->
+
+	    <!-- <section class="gallery-block compact-gallery"> -->
+
+		<!-- </section> -->
+
+		<!-- BOOTSTRAP REQUIRED jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+		<!-- onscroll js -->
+		<script src="//ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.7.2.js"></script>
+
+		<!-- lightbox cdn -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"></script>
+
+		<!-- main app js -->
+		{% assets "main_js" %}
+		    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+		{% endassets %}
+	</body>
+</html>

@@ -1,0 +1,5 @@
+start pipenv project
+pipenv install scrapy
+scrap startproject yourproject
+
+in spiders folder create spider file.py

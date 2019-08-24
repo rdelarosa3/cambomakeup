@@ -1,0 +1,1169 @@
+HOW TO START A PROJECT>>>
+
+*********** SET UP PROJECT *******************
+
+1) CREATE VIRTUAL ENV
+	pipenv install reques
+2) ACTIVATE ENVIRONMENT
+	pipenv shell
+3) CREATE GITHUB PROJECT
+	git init in folder
+4) SECURE YOUR SECRET FILES
+	touch .env
+	echo  "your keys" >> .env
+	touch .flaskenv
+		inside .flaskenv
+			FLASK_APP=run.py
+			FLASK_ENV='development'
+			APP_SETTINGS='blogsite.config.DevelopmentConfig'<---- folder structure to class
+	touch .gitignore
+	echo ".env" >> .gitignore
+5) GIT ADD, COMMIT, ADD REMOTE, PUSH -U
+6) CREATE APP IN HEROKU AND INITIATE
+	heroku login
+	heroku git:remote -a applicationname
+7) INSTALL DEPENDENCIES
+	(return to virtual env)
+	pipenv shell
+	pipenv install flask
+	pipenv install python-dotenv
+	pipenv install flask-sqlalchemy
+	pipenv install flask-wtf
+	pipenv install flask-bcrypt
+	pipenv install flask-login
+	pipenv install flask-mail
+	pipenv install Pillow
+	pipenv install psycopg2
+
+*************************************************************
+
+******* SET UP PACKAGE AND FOLDER,FILE STRUCTURE ************
+
+8) CREATE FILE IN ROOT FOLDER
+	run.py
+9) CREATE PACKAGE FOLDER IN ROOT FOLDER
+10) CREATE THE FOLLWING INSIDE PACKAGE FOLDER
+	__init__.py
+	config.py
+	models.py
+11) INSIDE __init__py PLACE THE FOLLOWING
+		#import environ keys
+		import os
+		# import app configuration class
+		from blogsite.config import Config
+		from flask import Flask
+		#import database
+		from flask_sqlalchemy import SQLAlchemy
+
+
+		# from blogsite.config import Config
+
+		def create_app(config_class=Config):
+			#set the app variable to Flask
+			app = Flask(__name__)
+
+			#Make sure config file is created with config class
+			app.config.from_object(os.environ['APP_SETTINGS'])
+
+			#app extensions
+			#***************************
+			#your app extensions will go in here
+			#**************************
+
+			# import routes after DB to prevent looping
+			#***************************
+			#your routes will go in here
+			from blogsite.blueprints.main.routes import main
+			app.register_blueprint(main)
+			#**************************
+
+			return app
+
+12) INSIDE config.py PLACE THE FOLLOWING
+
+		import os
+		from flask import Flask
+		#import database
+		from flask_sqlalchemy import SQLAlchemy
+		# import app configuration class
+		from blogsite.config import Config
+
+class Config():
+	#common keys
+	SECRET_KEY = os.environ.get('SECRET_KEY') or os.urandom(32)
+    SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    S3_KEY = os.environ['S3_KEY']
+    S3_SECRET = os.environ['S3_SECRET']
+    S3_BUCKET = os.environ['S3_BUCKET']
+    S3_LOCATION = f"http://{S3_BUCKET}.s3.amazonaws.com/"
+    #smtp email setup
+	MAIL_SERVER = 'smtp.googlemail.com'
+	MAIL_PORT = 587
+	MAIL_USE_TLS = True
+	MAIL_USERNAME = os.environ.get('EMAIL_USER')
+	MAIL_PASSWORD = os.environ.get('EMAIL_PASS') 
+
+##### THIS SECTION WILL SET THE CURRENT APP STATE #####
+## CALLED IN APP FILES AS os.environ['APP_SETTINGS'] ##
+class ProductionConfig(Config):
+    DEBUG = False
+
+
+class StagingConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+
+
+class DevelopmentConfig(Config):
+    DEVELOPMENT = True
+    DEBUG = True
+    SQLALCHEMY_ECHO = True
+
+class TestingConfig(Config):
+    TESTING = True
+
+
+
+13) IN ROOT FOLDER CREATE run.py AND PLACE THE FOLLOWING
+	from blogsite import create_app
+
+	app = create_app()
+
+	if __name__ == '__main__':
+    app.run()
+
+14) IN PACKAGE FOLDER CREATE FOLDERS;
+		 blueprints
+		 static
+		 templates
+		 main
+15) INSIDE BLUEPRINTS CREATE FOLDER MAIN
+16) INSIDE MAIN CREATE 
+		__init__.py
+		routes.py
+
+*************************************************************
+
+********* REQUIRED FILE STRUCTURE TO INITALIZED APP *********
+
+17)	INSIDE ROUTES.PY
+		from flask import render_template, request, Blueprint
+		#imports the models
+		# from blogsite.models import Post
+
+		main = Blueprint('main', __name__)
+
+		# APP INDEX/HOMEPAGE
+		@main.route("/")
+		#set multiple routes to same page
+		@main.route("/homepage")
+		def home():
+			return render_template('home.html')# return the template for route page
+
+18) INSIDE TEMPLATES CREATE TEMPLATE
+		# layout will be your template for entire app
+		layout.html
+		# template for home route
+		home.html 
+
+19) IN TEMPLATE CREATE THE HTML 
+		<!DOCTYPE html>
+		<html>
+		<head>
+			{% if title%} <!-- jinja code -->
+				<title>{{ title }}</title>
+			{% else %}
+				<title></title>
+			{% endif%}<
+		</head>
+		<body>
+			{% block content %}
+			{% endblock %}
+		</body>
+		</html>
+
+20) IN HOME HTML EXTEND THE LAYOUT & CONTENT BLOCK
+		{% extends "layout.html" %}
+		{% block content %}
+		<h1> Hello World</h1>
+		{% endblock content %}
+
+***********************************************************
+
+***************  RUN THE APPLICATION **********************
+21) IN TERMINAL	
+		export FLASK_APP=run.py <---- your app name
+		flask run
+		check for errors
+***********************************************************
+
+************** CREATE DATABASE ****************************
+
+22) CREATE YOUR DB
+		createdb yourdbname
+
+23)	IN __init__.py  SET db
+		db = SQLAlchemy()
+		inside create_app
+			#app extensions
+			db.init_app(app)
+
+24) IN .flaskenv CREATE URL
+		DATABASE_URL='postgres://localhost:5432/blogsite'
+
+
+25) IN TERMINAL INSTALL MIGRATE
+		pipenv install flask-migrate
+
+26) SET UP MIGRATION IN __init__.py
+		from flask_migrate import Migrate
+		#creates encrypted password 
+		from flask_bcrypt import Bcrypt
+		#Encrypted Password
+		bcrypt = Bcrypt()
+
+		migrate = Migrate()
+
+		#app extensions
+		#***************************
+		db.init_app(app)
+		migrate.init_app(app,db)
+
+27) IN models.py
+		from sqlalchemy import event#, Table, Column, Integer, ForeignKey, UniqueConstraint, Index
+		from sqlalchemy.orm import validates
+		from sqlalchemy.ext.hybrid import hybrid_property
+		from datetime import datetime
+		from blogsite import db
+		from flask_login import UserMixin
+		from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+		#added to use app_create function
+		from flask import current_app
+
+		create your models 
+
+28) CREATE THE MIGRATION FROM MODELS TO DB IN TERMINAL
+		flask db init
+		flask db migrate
+		flask db upgrade
+
+**************************************************************
+
+**************** SET UP MODEL FOR USE ************************
+
+29) CREATE BLUEPRINTS AND TEMPLATES FOR MODELS
+
+30) INSIDE BLUEPRINTS CREATE
+		__init__.py
+		routes.py
+		forms.py
+
+31) IN forms.py IMPORT MODULES AND CREATE FORM CLASS
+		# form module to be used
+		from flask_wtf import FlaskForm
+		# file uploading for forms
+		from flask_wtf.file import FileField, FileAllowed
+		# form fields for the forms used
+		from wtforms import StringField, PasswordField, SubmitField, BooleanField
+		# validators for the forms used
+		from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+
+		#variables called in forms imported from other files
+		from blogsite.models import User
+		# from flask_login import current_user
+
+		# USER CREATE/NEW FORM
+		class RegistrationForm(FlaskForm):
+
+32) IN THE MODEL BLUEPRINT routes.py IMPORT FORMS, MODELS, TEMPLATES AND DB
+		from flask import (render_template, url_for, flash, redirect, request, abort, Blueprint)
+		#imports the models
+		from blogsite.models import User
+		#import each created form classes from forms.py
+		from blogsite.blueprints.users.forms import RegistrationForm
+		# imports required variables from __init__
+		from blogsite import db, bcrypt
+
+
+
+		users = Blueprint('users', __name__)
+
+
+		############# USER RESOURCES/ROUTES #####################
+
+		# USER CREATE/NEW
+		@users.route("/register", methods=['GET', 'POST'])
+		def register():
+			#set form = imported RegistrationForm Class
+			form = RegistrationForm()
+			#form validation for form 
+			if form.validate_on_submit():
+				# created crypted password for user on database
+				hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+				#create user in database
+				user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+				db.session.add(user)
+				db.session.commit()
+				flash(f'Account created! You are no able to login!', 'success')
+				return redirect(url_for('main.home'))
+			return render_template('register.html', title='Register', form=form)#call form as argument
+
+33) CREATE HTML FORM FOR MODEL	
+		{% extends "layout.html" %}
+		{% block content %}
+
+		<div class="content-section">
+			<form method="POST" action="">
+				<!-- adds crf token protection -->
+				{{ form.hidden_tag() }} 
+				<fieldset class='form-group'>
+					<legend class="border_bottom mb-4">Join Today</legend>
+		                <div class="form-group">
+		                    {{ form.username.label(class="form-control-label") }}
+
+		                    {% if form.username.errors %}
+		                        {{ form.username(class="form-control form-control-lg is-invalid") }}
+		                        <div class="invalid-feedback">
+		                            {% for error in form.username.errors %}
+		                                <span>{{ error }}</span>
+		                            {% endfor %}
+		                        </div>
+		                    {% else %}
+		                        {{ form.username(class="form-control form-control-lg") }}
+		                    {% endif %}
+		                </div>
+					</fieldset>
+				<div class="form-group">
+					{{ form.submit(class="btn btn-outline-info")}}
+				</div>
+			</form>
+		</div>
+		{% endblock content %}
+
+34) ENSURE YOU REGISTERED ROUTES INSIDE __init__.py create_app
+		from blogsite.blueprints.users.routes import users
+		app.register_blueprint(users)
+
+****************************************************************
+******************* CREATE USER SIGN IN ************************
+
+35) IN __init__.py IMPORT LOGIN AND SET VARIABLES
+
+		#module for login commands
+		from flask_login import LoginManager
+
+		#set after db and bcrypt
+		#login manager customization
+		login_manager = LoginManager()
+		login_manager.login_view = 'users.login'
+		login_manager.login_message_category = 'info'
+
+		#inside create_app init
+		#app extensions
+		login_manager.init_app(app)
+
+36) IN models.py IMPORT login_manager AND SET LOGIN FUNCTION
+		from blogsite import db, login_manager
+
+		# REQUIRED FOR LOGIN 
+		@login_manager.user_loader
+		def load_user(user_id):
+		    try:
+		        return User.query.get(user_id)
+		    except:
+		        return None
+
+37) CREATE FOLDER STRUCTURE IN BLUEPRINTS FOR SESSIONS
+		__init__.py
+		forms.py
+		routes.py
+
+
+38) IN froms.py CREATE REQUIRED SESSION FORMS
+		# form module to be used
+		from flask_wtf import FlaskForm
+		# form fields for the forms used
+		from wtforms import StringField, PasswordField, SubmitField, BooleanField
+		# validators for the forms used
+		from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+
+		############# SESSION FORM #####################
+
+		# SESSION CREATE/NEW FORM 
+		class LoginForm(FlaskForm):
+			#pass validations as arguments
+			email = StringField('Email', 
+				validators=[DataRequired(), Email()])
+			password = PasswordField('Password', validators=[DataRequired()])
+			remember = BooleanField('Remember Me')
+			submit = SubmitField('Login')
+		
+
+
+39) IN routes.py IMPORT MODULES, SET BLUEPRINT AND ROUTES
+
+		from flask import (render_template, url_for, flash, redirect, request, abort, Blueprint)
+		#imports required variables for logged in session
+		from flask_login import login_user, current_user, logout_user, login_required
+		#imports the models
+		from blogsite.models import User
+		#import each created form classes from forms.py
+		from blogsite.blueprints.sessions.forms import LoginForm
+		# imports required variables from __init__
+		from blogsite import db, bcrypt
+
+
+		sessions = Blueprint('sessions', __name__)
+
+		############# SESSION RESOURCES/ROUTES #####################
+
+		# SESSION NEW/CREATE
+		@sessions.route("/login", methods=['GET', 'POST'])
+		def login():
+			if current_user.is_authenticated:
+				return redirect(url_for('main.home'))
+			#set form = imported LoginForm Class
+			form = LoginForm()
+			if form.validate_on_submit():
+				# find user and see of email match password
+				user = User.query.filter_by(email=form.email.data).first()
+				if user and bcrypt.check_password_hash(user.password, form.password.data):
+					#login user if all information matches
+					login_user(user, remember=form.remember.data)
+					flash(f'Welcome back {user.username}!', 'success')
+					# if coming from a required login page redirect to that page
+					next_page = request.args.get('next')
+					return redirect(next_page) if next_page else redirect(url_for('main.home'))
+				else:
+					flash('Login unsuccessful. Please check email and password', 'danger')
+			return render_template('login.html', title='Login', form=form)#call form as argument
+
+		# SESSION DELETE
+		@sessions.route("/logout")
+		def logout():
+			logout_user()
+			return redirect(url_for('main.home'))
+
+40) ADD BLUEPRINT TO __init__.py create_app
+		from blogsite.blueprints.sessions.routes import sessions
+		app.register_blueprint(sessions)
+
+41) CREATE TEMPLATES
+	##### LOGIN TEMPLATE ##############
+		{% extends "layout.html" %}
+		{% block content %}
+
+		<div class="content-section">
+			<form method="POST" action="">
+				<!-- adds crf token protection -->
+				{{ form.hidden_tag() }} 
+				<fieldset class='form-group'>
+					<legend class="border_bottom mb-4">Login</legend>
+
+					<div class="form-group">
+		                {{ form.email.label(class="form-control-label") }}
+		                {% if form.email.errors %}
+		                    {{ form.email(class="form-control form-control-lg is-invalid") }}
+		                    <div class="invalid-feedback">
+		                        {% for error in form.email.errors %}
+		                            <span>{{ error }}</span>
+		                        {% endfor %}
+		                    </div>
+		                {% else %}
+		                    {{ form.email(class="form-control form-control-lg") }}
+		                {% endif %}
+					</div>
+
+					<div class="form-group">
+		                {{ form.password.label(class="form-control-label") }}
+		                {% if form.password.errors %}
+		                    {{ form.password(class="form-control form-control-lg is-invalid") }}
+		                    <div class="invalid-feedback">
+		                        {% for error in form.password.errors %}
+		                            <span>{{ error }}</span>
+		                        {% endfor %}
+		                    </div>
+		                {% else %}
+		                    {{ form.password(class="form-control form-control-lg") }}
+		                {% endif %}
+					</div>
+
+					<div class="form-check">
+						{{ form.remember(class="form-check-input")}}
+						{{ form.remember.label(class="form-check-label")}}
+					</div>
+					
+				</fieldset>
+				<div class="form-group">
+					{{ form.submit(class="btn btn-outline-info")}}
+				</div>
+				<small class="text-muted ml-2">
+					<a href="#">Forgot Password?</a>
+				</small>
+			</form>
+		</div>
+		<div class="border-top pt-3">
+			<small class="text-muted">
+				New User? <a class="ml-2" href="{{url_for('users.register')}}"> Sign Up </a>
+			</small>
+		</div>	
+
+		{% endblock content %}
+
+42) ADD LINKS TO NAVBAR FOR LOGIN/LOGOUT
+
+		<div class="navbar-nav">
+	        <!-- logout user link if logged in -->
+	       	{% if current_user.is_authenticated %}
+	       		<a class="nav-item nav-link" href="{{ url_for('sessions.logout')}}">Logout</a>
+	       	{% else %}
+	       	<!-- login link and register if not logged in -->
+	          <a class="nav-item nav-link" href="{{ url_for('sessions.login')}}">Login</a>
+	          <a class="nav-item nav-link" href="{{url_for('users.register')}}">Register</a>
+	        {% endif %}
+	    </div>
+
+*****************************************************************
+*************** PASSWORD RESET **********************************
+
+
+43) UPDATE USER MODEL FILE
+		#TOKEN CREATION-- will expire in 30 minutes for the user
+		def get_reset_token(self, expires_sec=1800):
+			s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
+			return s.dumps({'user_id': self.id}).decode('utf-8')
+
+		# TOKEN VERIFICATION
+		#staticmethod tell python not to accept self as an argument only the given arugment 
+		@staticmethod
+		def verify_reset_token(token):
+			s = Serializer(current_app.config['SECRET_KEY'])
+			try:
+				user_id = s.loads(token)['user_id']
+			except:
+				return None
+			return User.query.get(user_id)
+		
+44) CREATE BLUEPRINT FOR PASSWORDS
+		__init__.py
+		forms.py
+		routes.py
+
+45) IN PASWORDS forms.py CREATE REQUIRED FORMS
+		# form module to be used
+		from flask_wtf import FlaskForm
+		# form fields for the forms used
+		from wtforms import StringField, PasswordField, SubmitField, BooleanField
+		# validators for the forms used
+		from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+
+		#variables called in forms imported from other files
+		from blogsite.models import User
+		from flask_login import current_user
+
+
+		# USER PASSWORD RESET REQUEST FORM
+		class RequestResetForm(FlaskForm):
+			email = StringField('Email', validators=[DataRequired(), Email()])
+			submit = SubmitField('Request Password Reset')
+
+			#custom validation for email
+			def validate_email(self, email):
+				user = User.query.filter_by(email=email.data).first()
+
+				if user is None:
+					raise ValidationError('There is no account with that email. Please Register.')
+
+		# USER PASSWORD RESET/NEW FORM
+		class ResetPasswordForm(FlaskForm):
+			password = PasswordField('Password', validators=[DataRequired()])
+			confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+
+			submit = SubmitField('Reset Password')
+
+46) IN PASSWORDS routes.py 
+		from flask import (render_template, url_for, flash, redirect, request, abort, Blueprint)
+		#imports required variables for logged in session
+		from flask_login import login_user, current_user, logout_user, login_required
+		#imports the models
+		from blogsite.models import User
+		#import each created form classes from forms.py
+		from blogsite.blueprints.passwords.forms import (ResetPasswordForm, RequestResetForm)
+		# imports required variables from __init__
+		from blogsite import db, bcrypt
+
+		passwords = Blueprint('passwords', __name__)
+		########### PASSWORD RESET ROUTES ######################
+
+		########### PASSWORD RESET ROUTES ######################
+
+		@passwords.route("/reset_password", methods=['GET','POST'])
+		def reset_request():
+			if current_user.is_authenticated:
+				return redirect(url_for('main.home'))
+			form = RequestResetForm()
+			if form.validate_on_submit():
+				user = User.query.filter_by(email=form.email.data).first()
+				send_reset_email(user)
+				flash('Instructions have been sent to your email. Please follow to reset password.','success')
+				return redirect(url_for('sessions.login'))
+			return render_template('reset_request.html', title='Reset Password', form=form)
+
+
+		@passwords.route("/reset_password/<token>", methods=['GET','POST'])
+		def reset_token(token):
+			if current_user.is_authenticated:
+				return redirect(url_for('main.home'))
+			user = User.verify_reset_token(token)
+			if not user:
+				flash('That is an invalid or expired token', 'warning')
+				return redirect(url_for('passwords.reset_request'))
+			form = ResetPasswordForm()
+			if form.validate_on_submit():
+				# created crypted password for user on database
+				hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+				user.password = hashed_password
+				db.session.commit()
+				flash(f'Password has been updated! You are no able to login!', 'success')
+				return redirect(url_for('sessions.login'))
+			return render_template('reset_token.html', title='Reset Password', form=form)
+
+47) CREATE TEMPLATES
+	###### RESET REQUEST FORM
+		{% extends "layout.html" %}
+		{% block content %}
+
+		<div class="content-section">
+			<form method="POST" action="">
+				<!-- adds crf token protection -->
+				{{ form.hidden_tag() }} 
+				<fieldset class='form-group'>
+					<legend class="border_bottom mb-4">Reset Password</legend>
+
+					<div class="form-group">
+		                {{ form.email.label(class="form-control-label") }}
+		                {% if form.email.errors %}
+		                    {{ form.email(class="form-control form-control-lg is-invalid") }}
+		                    <div class="invalid-feedback">
+		                        {% for error in form.email.errors %}
+		                            <span>{{ error }}</span>
+		                        {% endfor %}
+		                    </div>
+		                {% else %}
+		                    {{ form.email(class="form-control form-control-lg") }}
+		                {% endif %}
+					</div>
+					
+				</fieldset>
+				<div class="form-group">
+					{{ form.submit(class="btn btn-outline-info")}}
+				</div>
+
+			</form>
+		</div>
+	{% endblock content %}
+
+	###### RESET TOKEN FORM
+	{% extends "layout.html" %}
+	{% block content %}
+
+	<div class="content-section">
+		<form method="POST" action="">
+			<!-- adds crf token protection -->
+			{{ form.hidden_tag() }} 
+			<fieldset class='form-group'>
+				<legend class="border_bottom mb-4">Reset Password</legend>
+
+				<div class="form-group">
+	                {{ form.password.label(class="form-control-label") }}
+	                {% if form.password.errors %}
+	                    {{ form.password(class="form-control form-control-lg is-invalid") }}
+	                    <div class="invalid-feedback">
+	                        {% for error in form.password.errors %}
+	                            <span>{{ error }}</span>
+	                        {% endfor %}
+	                    </div>
+	                {% else %}
+	                    {{ form.password(class="form-control form-control-lg") }}
+	                {% endif %}
+				</div>
+				<div class="form-group">
+	                {{ form.confirm_password.label(class="form-control-label") }}
+	                {% if form.confirm_password.errors %}
+	                    {{ form.confirm_password(class="form-control form-control-lg is-invalid") }}
+	                    <div class="invalid-feedback">
+	                        {% for error in form.confirm_password.errors %}
+	                            <span>{{ error }}</span>
+	                        {% endfor %}
+	                    </div>
+	                {% else %}
+	                    {{ form.confirm_password(class="form-control form-control-lg") }}
+	                {% endif %}
+				</div>
+				
+			</fieldset>
+			<div class="form-group">
+				{{ form.submit(class="btn btn-outline-info")}}
+			</div>
+
+		</form>
+	</div>
+
+
+	{% endblock content %}
+
+
+48) ADD BLUEPRINT TO __init__.py create_app
+
+	from blogsite.blueprints.passwords.routes import passwords
+	app.register_blueprint(passwords)
+
+49) IN TERMINAL UPDATE DB
+		flask db upgrade
+
+50) ADD LINK TO LOGIN FORM
+		<a href="{{url_for('passwords.reset_request')}}">Forgot Password?</a>
+
+*****************************************************
+************ SET UP MAILER **************************
+
+51) SET UP MAILER SMTP IN config.py Config()
+	MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.environ.get('EMAIL_USER')
+    MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
+
+    ***** PLACE SECRET KEYS IN ENV FILE ********
+
+52) IN __init__.py IMPORT MAIL AND SET EXTENSION
+		from flask_mail import Mail
+
+		mail = Mail()
+
+53) IN PASSWORDS CREATE utils.py AN IMPORT & CREATE FUNCTION
+
+	# import helpers/utils
+	#added current_app to use app_create function
+	from flask import url_for, current_app
+	# send email messages
+	from flask_mail import Message
+	# imports required variables from __init__
+	from blogsite import mail
+
+	def send_reset_email(user):
+		token = user.get_reset_token()
+		msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
+		msg.body = f''' To reset your password, visit the following link: {url_for('users.reset_token',token=token, _external=True)}
+
+		If you did not make this request then simply ignore this email no change has been made.
+		'''
+		mail.send(msg)
+
+
+54) IN PASSWORDS routes.py IMPORT HELPER  AND SET ROUTES
+	
+		from blogsite.users.utils import send_reset_email
+
+*************************************************************
+************* SET UP AWS CLOUD STORAGE **********************
+
+55) INSTALL  TERMINAL 
+		pipenv install boto3 botocore werkzeug
+
+56) CREATE .env VARIABLES
+		S3_BUCKET=''
+		S3_KEY=''
+		S3_SECRET=''
+		S3_LOCATION="http://bucketname.s3.amazonaws.com/"
+
+56) CREATE SOME helper.py TO RUN THE CODE
+
+57) IN SCRIPT IMPORT
+		import boto3
+		import botocore
+		import os
+
+58) CONNECT TO S3
+		s3 = boto3.client("s3", 
+		    aws_access_key_id=os.environ["S3_KEY"], 
+		    aws_secret_access_key=os.environ["S3_SECRET"])
+
+		my_bucket=os.environ['S3_BUCKET']
+
+
+59) CREATE UPLOAD FUNCTION 
+
+
+		def upload_file_to_s3(file, bucket_name=my_bucket, acl="public-read"):
+		    """
+		    Docs: http://boto3.readthedocs.io/en/latest/guide/s3.html
+		    """
+		    #image resizing
+
+		    try:
+		        s3.upload_fileobj(
+		            file,
+		            bucket_name,
+		            file.filename,
+		            ExtraArgs={
+		                "ACL": acl,
+		                "ContentType": file.content_type
+		            }
+		        )
+
+		    # This is a catch all exception, edit this part to fit your needs.
+		    except Exception as e:
+		        print("Something went wrong", e)
+		        return e
+
+		    #Return a URL to the uploaded file
+		    return "{}{}".format(os.environ["S3_LOCATION"], file.filename)	
+
+60) CREATE DELETE FUNCTION		
+		#ALLOW US TO REPLACE THE FILE FROM S3
+		def delete_file_from_s3(file, bucket_name=my_bucket, acl="public-read"):
+		    """
+		    Docs: http://boto3.readthedocs.io/en/latest/guide/s3.html
+		    """
+
+
+		    try:
+		        s3.delete_object(
+		            Bucket=bucket_name,
+		            Key=file
+		        )
+
+		    except Exception as e:
+		        print("Something Happened: ", e)
+		        return e
+	
+
+61) CREATE FILE TYPE RESTRICTIONS
+		def allowed_profile_images(filename):
+    		return '.' in filename and \
+           			filename.rsplit('.', 1)[1].lower() in ['jpg', 'png', 'jpeg']
+
+
+		def allowed_images(filename):
+		    return '.' in filename and \
+		           filename.rsplit('.', 1)[1].lower() in ['jpg', 'png', 'jpeg']
+
+
+62) CREATE THE ROUTE FOR FILE TO POST UPLOAD
+		#EXAMPLE FOR PROFILE UPLOAD:
+
+		#OUR POST ROUTE
+		# USER PROFILE IMAGE ROUTE
+		@users.route("/users/<string:username>/image", methods=['POST'])
+		@login_required
+		def upload_profile_image(username):
+			form = UpdateAccountForm()
+			user = User.query.filter_by(username=username).first_or_404()
+
+		    # Prevent unauthorized user from changing data of another user
+			if not user.id == current_user.id:
+				return render_template('users/edit.html', validation_errors=['Unauthorized!'], form=form, user=user)
+			# Check if image in file for upload
+			if "image_file" not in request.files:
+				flash("No profile image")
+				return render_template('users/edit.html', validation_errors=[], form=form, user=user)
+
+			file = request.files["image_file"]
+
+			# if no filename ask for new image
+			if file.filename == "":
+				flash("Please select a file")
+				return render_template('edit.html', form=form)
+
+			# check if file extension is acceptable
+			if file and allowed_profile_images(file.filename):
+				# if there is a previous file delete the file
+				old_filename = user.image_file
+				delete_file_from_s3(old_filename)
+
+				# create a custom name for file
+				file.filename = secure_filename(user.username + "-" + file.filename)
+				# upload the file
+				output = upload_file_to_s3(file)
+				# set the user image file equal the bucket url
+				user.image_file = output
+			
+				db.session.commit()
+				flash("Profile Picture Updated!")
+
+				#redirect the user create the post action
+				return redirect(url_for('main.home'))
+
+			else:
+				return redirect("/")
+
+63) CREAT POST FORM IN HTML
+		<div class="row">
+		  <div class="col-3">
+		  	### VIEW THE USER PROFILE IMAGE
+		    {% if user.image_file %}
+		      <img src="{{user.image_file}}" class="profile-picture-edit rounded float-left" alt="{{user.username}}-profile-picture"/>
+		    {% else %}
+		      <img src="https://s3.amazonaws.com/next-curriculum-instagram/profile-placeholder.jpg" class="profile-picture-edit rounded float-left" alt="{{user.username}}-profile-picture"/>
+		    {% endif %}
+		  </div>
+		  <div class="col-9">
+		  	### IMAGE UPLOAD FORM ####
+		    <form action={{url_for("users.upload_profile_image", username=user.username)}} method="POST" enctype="multipart/form-data">
+		      <input type="file" name="image_file">
+		      <button class="btn btn-primary" type="submit">Upload</button>
+		    </form>
+		  </div>
+		</div>
+
+******************************************************************
+******************* DEPLOY TO HEROKU *****************************
+
+64) IN HEROKU APP SETTINGS SET CONFIG VARS WITH .env VARIABLES
+		"""" DON NOT PUT THE DATABASE FROM .env HEROKU PG WILL BE USED """"
+65) IN TERMINAL INSTALL
+		pipenv install gunicorn
+		pipenv install psycopg2-binary
+66) SET THE HEROKU ENVIRONMENT TO PRODUCTION
+		heroku config:set APP_SETTINGS=blogsite.config.ProductionConfig --remote heroku
+67) SET THE HEROKU POSTGRESQL
+		heroku addons:create heroku-postgresql:hobby-dev
+		#### IF YOU PUSHED YOUR LOCAL DB INTO HEROKU ###
+		heroku pg:promote HEROKU_POSTGRESQL_YELLOW
+
+68) CREATE Profile IN MAIN APP DIRECTORY
+		# gunicorn appfile_used_to_run_application:name_of_app
+		# flask db to create the database
+		web: flask db upgrade; gunicorn run:app --preload
+
+69) GIT ADD, COMMIT, PUSH, HEROKU PUSH TO MASTER
+
+************** DOWNLOAD FROM AWS ************************************
+*********************************************************************
+create <a href="sourcelink" download>dowload</a>
+set the following in the args for aws upload to set the permissio to donwload.
+ExtraArgs={
+    "ACL": acl,
+    "ContentType": file.content_type
+    "ContentDisposition":'attachment' <----- set this if which to create a download link
+}
+        
+******************************************************************
+******************* DEPLOY TO AWS *****************************
+
+70) IN TERMINAL 
+		pipenv install awscli
+		pipenv install awsebcli
+
+71) IN AWS ACCOUNT ADD IAM USER: 
+		Access type: Programmatic access
+		Set permissions click on the “Add user to group”
+		Click on “Create group”: Create a group name, “ebadmins”
+		Assign it the policy name “WSElasticBeanstalkFullAccess”
+		Click on the “Create group”
+		Next: review
+		Create user
+		Download .csv
+		You will need that information to connect and (SSH) into your EB
+
+72) CREATE REQUIREMENTS FILE TO BE USED IN EBS APP
+		pipenv lock -r > requirements.txt
+
+73) IN TERMINAL EB COMMANDS TO SET UP EBS
+ 		eb init -i
+
+ 		#ANSWER THE SERIES OF QUESTIONS
+ 		Under “Enter Application name” enter your application name
+
+ 		#If this is your first time running AWS on your computer, it will ask for your credentials. Open the “credentials.csv”
+ 		#Go with the Python defaults (it needs to be a 3.x version), ignore warnings, and say yes setting up SSH
+ 		#Create a new KeyPair or select an existing one and keep going with the defaults. If you create a new key-pair, it will save it in a folder and tell you the location.
+
+ 		#Next you need to create your EB (use a unique name)
+ 		eb create appname
+
+74) CREATE RDS DATABASE IN AWS ACCOUNT
+		IN AWS GO TO ELASTIC BEANSTALK
+		SELECT YOUR APPLICATION
+		GO TO CONFIGURATION
+		SELECT DATABASE
+			SELECT ENGINE
+			DB INSTANCE TYPE
+			DB INDENTIFIER
+			DB USERNAME
+			DB PASSWORD
+
+75) IN AWS ACCOUNT GO TO YOUR NEW DB IN RDS
+		IN SECURITY GROUPS SELECT THE ONE WITH CIDR/IP - Inbound
+		CLICK ON INBOUNG TAB SELECT EDIT
+			SET TYPE TO ALL TRAFFIC 
+			SET SOURCE TO ANYWHERE
+
+76) RETURN TO ELASTIC BEANSTALK APP CONFIGURATION
+		SELECT SOFTWARE AND MODIFY
+			# wsgi is defaulted to application.py
+			SET WSGIPath TO CORRECT RUN.PY OR APP.PY  
+			SET YOUR ENV VARIABLES
+		
+77) SET RDS VARIABLES IN AWS AND IN LOCAL .env
+		RDS_HOSTNAME='address'
+		RDS_USERNAME='db username'
+		RDS_PASSWORD='db password'
+		RDS_PORT='5432'
+		RDS_DB_NAME='database name'
+
+73) PREPARE DB IN config.py
+	# if .env file contains RDS variables
+    if 'RDS_HOSTNAME' in os.environ:
+    	SQLALCHEMY_DATABASE_URI = f"postgresql://{os.environ.get('RDS_USERNAME')}:{os.environ.get('RDS_PASSWORD')}@{os.environ.get('RDS_HOSTNAME')}/{os.environ.get('RDS_DB_NAME')}"
+    else:
+        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+
+74) IN YOUR app.py/run.py CREATE AN APPLICATION VARIABLE FOR APP
+		#AWS LOOKS FOR THIS VARIABLE
+		application = app = create_app()
+
+75)	IN TERMINAL flask db upgrade 
+		TO CREATE RDS TABLES
+
+76) IN TERMINAL eb deploy
+
+77) In TERMINAL eb open
+
+
+########## SETTING UP ASSETS FOR STATIC USE IN PRODUCTION ##########
+
+78) IN AWS EB CONFIG SET /static/ TO TARGET DIRECTORY  appname/static/
+79) IN ROOT FOLDER CREATE FOLDER .ebextensions
+		IN FOLDER CREATE FILE python.config AND PLACE THE DIRECTORIES
+			option_settings:
+			  "aws:elasticbeanstalk:container:python:staticfiles":
+			    "/static/": "blogsite/static/"
+			    "/favicon.ico": "blogsite/static/favicon.ico"
+80) IN TERMINAL pipenv install Flask-Assets
+81) IN APP __init__.py
+		#css and js asset management
+		from flask_assets import Environment, Bundle
+
+		#SET EXTENSION
+		assets = Environment()
+
+		#CREATE AN ASSETS BUNLDE
+		js = Bundle('jquery.instagramFeed.js',
+            output='gen/main.js')
+
+        #INITALIZE THE EXTENSION INSIDE create_app
+        assets.init_app(app)
+
+        #REGISTER THE ASSETS INSIDE create_app
+		assets.register('main_js', js)
+
+82) TO CALL BUNDLED FILES IN TEMPLATE
+		{% assets "main_js" %}
+		<script  type="text/javascript" src="{{ ASSET_URL }}"></script>
+		{% endassets %}
+
+
+############## ENABLE GZIP BEANSTALK ############################################
+
+83) IN .ebextension CREATE TWO FILES
+		myapp.config
+		enable_mod_deflate.conf
+
+84) IN enable_mod_deflate.conf PASTE
+		# mod_deflate configuration
+		<IfModule mod_deflate.c>
+		# Restrict compression to these MIME types
+		AddOutputFilterByType DEFLATE text/plain
+		AddOutputFilterByType DEFLATE text/html
+		AddOutputFilterByType DEFLATE application/xhtml+xml
+		AddOutputFilterByType DEFLATE text/xml
+		AddOutputFilterByType DEFLATE application/xml
+		AddOutputFilterByType DEFLATE application/xml+rss
+		AddOutputFilterByType DEFLATE application/x-javascript
+		AddOutputFilterByType DEFLATE text/javascript
+		AddOutputFilterByType DEFLATE text/css
+		AddOutputFilterByType DEFLATE image/png
+		AddOutputFilterByType DEFLATE image/gif
+		AddOutputFilterByType DEFLATE image/jpeg
+
+		# Level of compression (Highest 9 - Lowest 1)
+		DeflateCompressionLevel 9
+
+		# Netscape 4.x has some problems.
+		BrowserMatch ^Mozilla/4 gzip-only-text/html
+
+		# Netscape 4.06-4.08 have some more problems
+		BrowserMatch ^Mozilla/4\.0[678] no-gzip
+
+		# MSIE masquerades as Netscape, but it is fine
+		BrowserMatch \bMSI[E] !no-gzip !gzip-only-text/html
+
+		<IfModule mod_headers.c>
+		# Make sure proxies don't deliver the wrong content
+		Header append Vary User-Agent env=!dont-vary
+		</IfModule>
+
+		</IfModule> 
+
+85) IN myapp.config PASTE
+		container_commands:
+		    01_setup_apache:
+		        command: "cp .ebextensions/enable_mod_deflate.conf /etc/httpd/conf.d/enable_mod_deflate.conf"
+
+86) DEPLOY AND RESTART BEANSTALK
+
+########## MINIFY HTML #########################################
+
+87) IN TERMINAL pipenv install django-htmlmin
+
+88) IN EACH ROUTE FILE IMPORT
+		from htmlmin.minify import html_minify
+
+89) IN EACH ROUTE SET RENDERED TEMPLATE TO VARIABLE AND RETURN MINIFY
+		rendered_html = render_template('home.html')
+		return html_minify(rendered_html)
+
+####### OPTIMIZE IMAGES #######################################
+
+90) https://imagecompressor.com/
+
+####### SET UP SSH IN BEANSTALK ###############################
+
+91) IN AWS CONSOLE GO TO CERTIFICATE MANAGER
+		CREATE THE DOMAINS YOU WISH TO REGISTER
+		CONFIRM THE REQUEST
+		CLICK THE CREATE RECORD IN ROUTE53
+		WAIT FOR CONFIRMATION
+
+92) IN ROUTE53 FOR THE RECORDS CREATED 
+		CHANGE THEM FROM CNAME TO A-IPV4
+		ALIAS TARGET THE BEANSTALK APPLICATION
+		ENSURE A NAKED DOMAIN AND CNAME IS IS ALSO SET TO YOUR BEANSTALK APP
+
+93) IN AWS EC2 FOR YOUR BEANSTALK ENSURE THE SECURITY GROUP ALLOWS INBOUT HTTPS TRAFFIC
+
+94) IN BEANSTALK APP GO TO CONFIGURATION AND GO TO LOAD BALANCER
+		ADD LISTENER FOR PORT 443
+		ADD RULE FOR PORT 443
+		APPLY CHANGES
+
+
+############################################################################
+######### REDIRECT HTTP TO HTTPS ###########################################
+
+93) IN .ebextensions CREATE FILE https-redirect-python.config
+
+94) GO TO 
+	https://github.com/awsdocs/elastic-beanstalk-samples/blob/master/configuration-files/aws-provided/security-configuration/https-redirect/python/https-redirect-python.config
+
+95) COPY THE CODE FROM GITHUB PAGE TO YOUR https-redirect-python.config
+		DEPLOY APP
+		RESTART BEANSTALK APP
+
+##############################################################################
+
+
+

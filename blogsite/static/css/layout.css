@@ -1,0 +1,422 @@
+/*onscroll css*/
+.revealOnScroll{opacity:0;}
+
+/*******language links*******/
+.eng-link{
+	display: none;
+}
+.khmer-link{
+	font-size: larger;
+	font-weight: 500;
+}
+.lang{
+	cursor: pointer;
+}
+
+/****** Navbar Section ******/
+.nav-link{
+	cursor: pointer;
+	color:#323630!important;
+}
+.nav-link:hover{
+	color:#ff86a2!important;
+}
+.fab{
+	color:#323630;
+
+}
+
+nav {
+	background-color: rgb(255,255,255);
+	opacity: .93;
+	visibility: visible;
+}
+
+body #myModal .modal-open {
+    position: fixed;
+}
+
+#logo{
+	width: 100px;
+    height: 60px;
+}
+/****** Navbar Mobile Screen ******/
+@media (max-width: 830px){
+	.collapse{
+	    height: 100vh;
+	    width: 100vw;
+	    transition: all 3.0s ease-in-out!important;
+	    visibility: visible;
+	}
+
+	.navbar-light .navbar-toggler {
+	    border: none!important;
+	}
+	nav ul{
+		margin-top: 20px;
+	}
+	#hero {
+	    margin-top: -35px!important;
+	}
+	#socialNav{
+		display: none;
+	}
+	#socialDN{
+		margin-top: 40%;
+	}
+	#dropDown{
+		text-align: center;
+	}
+	#dropDownLang{
+		display: block!important;
+	}
+}
+
+/***** Navbar Desktop Screen *****/
+@media screen and (min-width: 992px) {
+   #socialDN {
+   	display: none;
+   }
+}
+
+/****** Social Buttons Hover ******/
+.fa-facebook-f:hover{
+	color:#4267b2;
+}
+.fa-instagram:hover{
+	color: #c32aa3;
+}
+.fa-facebook-messenger:hover{
+	color: #0084ff;
+
+}
+.fa-youtube:hover{
+	color:#c4302b;
+}
+
+
+/*Side Booking Section*/
+#sideButton img{
+	height: 200px;
+    width: 120px;
+    opacity: .9;
+    transition: transform .2s;
+	-webkit-filter: drop-shadow(5px 5px 7px #222222);
+    filter: drop-shadow(5px 5px 7px #222222);
+}
+#sideButton img:hover {
+	transform: scale(1.1);
+}
+#sideButton {
+	right:-38px;
+}
+
+/****** #myModal  Section ******/
+.modal-buttons{
+	color: #fff;
+	background-color: #27c3bbbf;
+	border-color: #27c3bbbf;
+}
+
+
+/*Modal Booking Buttons Mobile Scree*/
+@media only screen and (max-width: 480px) {
+	#myModal .modal-dialog {
+	  width: 100%;
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+	#myModal .modal-content {
+	  height: auto;
+	  min-height: 100%;
+	  border-radius: 0;
+	}
+	#myModal .modal-body {
+	  height: auto;
+	  min-height: 90%;
+	  border-radius: 0;
+	}
+	#myModal .modal-footer {
+		min-height: 10%;
+	  height: auto;
+	}
+	iframe{
+		height:auto;
+		min-height: 100%;
+		position:relative;
+	}
+	.pricing-loader {
+		margin-top: 50%!important;
+	}
+	#sideButton img{
+		opacity:.8;
+		height: 150px;
+		width: 75px;" 
+	}
+		#sideButton {
+			right:-23px;
+		}		
+}
+
+/*Booking Screen Mobile Stretch*/
+@media only screen and (min-height:  800px) {
+	#bookingFrame {
+		height: 700px!important;
+	}
+}
+
+/*Page Loaders*/
+.pricing-loader {
+	margin-top: 20%;
+	margin-bottom: 20%;
+	display: none;
+	border: 12px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 12px solid #27c3bbbf;
+	width: 120px;
+	height: 120px;
+	-webkit-animation: spin 1s linear infinite; /* Safari */
+	animation: spin 1s linear infinite;
+}
+
+.loader {
+	display: none;
+	border: 16px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 16px solid #ff86a2bf;
+	width: 120px;
+	height: 120px;
+	-webkit-animation: spin 2s linear infinite; /* Safari */
+	animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/***** Footer Section *****/
+footer{
+	background-color:#222222;
+	padding: 60px 0px;
+}
+
+footer .menu li a{
+	color:#b1aca1;
+	padding:10px;
+	text-decoration:none;
+}
+
+footer .menu li a:hover{
+	color:#ff86a2
+}
+
+footer .fab{
+	color:#b1aca1;
+	font-size:20px;
+	padding:10px;
+}
+
+
+/************ HOMEPAGE CSS ************/
+#hero{
+	height: 65vh;
+	margin-top: 5px;
+}
+
+.shadow-cu{
+	box-shadow:0px 0px 10px 0px;
+}
+
+section h2 {
+	text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+/****** Floating Button ******/
+#floating-button{
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  bottom: 30px;
+  left: 30px;
+  cursor: pointer;
+  transform: rotate(-50deg);
+  -webkit-filter: drop-shadow(5px 5px 5px #22222263);
+  filter: drop-shadow(-5px 0px 5px #22222263);
+}
+
+
+#container-floating{
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  bottom: 30px;
+  left: 30px;
+  z-index: 50;
+  animation: 2s infinite beatHeart;
+}
+
+#container-floating p {
+	text-shadow: 1px 2px 0px rgba(0,0,0,.2);
+    margin-left:70px;
+    font-family: 'Lato', sans-serif;
+}
+
+@keyframes beatHeart {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.1);
+  }
+}
+
+/*mobile screens*/
+@media (max-width: 830px){
+		#aboutImage{
+			height: auto!important;
+		}
+		#hero{
+    	margin-top: 0px!important;
+  	}
+  	#floating-button{
+  		width: 80px;
+  		height: 80px;
+  		right:0px;
+  		left:auto;
+  		margin-left: 40px;
+  	}
+  	#container-floating{
+  		right:10px;
+  		left:auto;
+  		bottom: 30px;
+  	}
+  	#container-floating p {
+  		padding-top: 5px;
+  		margin-left: 65px;
+  	}
+
+	}
+
+/*mobile landscape*/
+@media only screen 
+and (max-width : 768px) 
+and (max-height: 430px)  {
+
+	#container-floating{
+  		left:0px;
+  		right:auto;
+  		margin-left: 40px;
+  		bottom: 0px;
+  	}
+
+	#floating-button{
+  		left:0px;
+  		right:auto;
+  		margin-left: 40px;
+  	}
+}
+
+/*iPad Portrait */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+  #floating-button{
+	  width: 150px;
+	  height: 150px;
+	  bottom: 30px;
+	  left: 30px;
+	}
+	#container-floating{
+	  width: 150px;
+	  height: 150px;
+	  bottom: 50px;
+	  left: 30px;
+	}
+	#container-floating p {
+  		margin-left: 105px;
+  	}
+}
+
+
+/*iPad Landscape*/
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) { 
+
+	#container-floating p {
+  		margin-left: 75px;
+  	}
+	}
+	/****** End Floating Button ******/
+	
+	/****** Homepage Gallery ******/
+	#gallery .list-inline-item {
+		cursor: pointer;
+	}
+	#gallery .list-inline-item:hover {
+		color:#ff86a2;
+	}
+#gallery .col-sm-6 {
+	max-width: 50%!important;
+}
+
+.zoom-on-hover:hover .image {
+  -webkit-transform:scale(1.25); /* Safari and Chrome */
+  -moz-transform:scale(1.25); /* Firefox */
+  -ms-transform:scale(1.25); /* IE 9 */
+  -o-transform:scale(1.25); /* Opera */
+   transform:scale(1.25);
+  opacity: 0.7; 
+
+}
+.zoom-on-hover .image {
+  -webkit-transition: all 1s ease; /* Safari and Chrome */
+  -moz-transition: all 1s ease; /* Firefox */
+  -ms-transition: all 1s ease; /* IE 9 */
+  -o-transition: all 1s ease; /* Opera */
+  transition: all 1s ease;
+
+}
+.zoom-on-hover {
+	overflow: hidden;
+}
+ /***** End Homepage Gallery *****/
+
+/***** Services Section *****/
+#services img {
+	background-color: rgba(255, 192, 203, .3);
+	margin-bottom: 10px;
+}
+
+#services p {
+	font-family: 'Lato', sans-serif!important;
+	line-height: 1.7!important;
+	font-size: 1.3rem!important;
+
+}
+
+#services h4 {
+	text-shadow: 4px 4px 0px rgba(0,0,0,0.1);
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+#services img{
+	width:150px;
+	height: 150px;
+	border-radius: 90px;
+}
+/***** End Services Section *****/
+
+/************ END HOMEPAGE CSS ************/

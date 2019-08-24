@@ -1,0 +1,134 @@
+{% extends "layout.html" %}
+{% block content %}
+<!-- main image  -->
+<div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" id="hero" src="https://s3-ap-southeast-1.amazonaws.com/cambomakeup/SreyNy.png" alt="First slide">
+    </div>
+  </div>
+</div>
+
+
+<!-- scroll down button -->
+<div id="container-floating" class="fadeInRight">
+	<img src="https://s3-ap-southeast-1.amazonaws.com/cambomakeup/9ccbffe2fecf0b817eff9d5147f4be33%2B(1).png" id="floating-button" data-toggle="tooltip" data-placement="left" data-original-title="Create">
+	<p class="eng-link">Touch</p>
+	<p class="khmer-link" style="padding-top:0px!important;margin-top: -10px!important;margin-left: 75px!important">ចុច</p>
+</div>
+
+</div>
+
+<!-- seperator image -->
+<div class="row" style='margin-right: 0;margin-left: 0;'>
+	<div class="col-md-3">
+	</div>
+	<div class="col-md-9 img-fluid" style="background-image: url('https://s3-ap-southeast-1.amazonaws.com/cambomakeup/23577e7a7eb8829.png');background-repeat: no-repeat;background-size: 100% 100%;height: 35vh;margin-top: -50px">
+	</div>
+</div>
+
+<!-- about the artist -->
+<section id="about" class="pt-5 pb-5" style="background-color: #fffafa;">
+	<div class="container">
+		<h1 class="text-center" style="display: none;">  Cambo Makeup by SreyNy Cambodias Best Studio </h1>
+		<div class='row shadow' id="aboutImage">
+			<div class="col-md-6" style="text-align: center;">
+
+				<img src="https://s3-ap-southeast-1.amazonaws.com/cambomakeup/IMG_5808.jpg" class="img-fluid shadow-cu rounded" id="aboutImage" style="height: 400px;" >
+			</div>
+			<div class="col-md-6 text-center align-items-center" id="aboutText">
+				<h2 class="text-uppercase font-weight-bold" style="margin-top: 60px;">
+					<span class="eng-link">Makeup Artist</span>
+					<span class="khmer-link" >អ្នកផាត់មុខ</span>
+				</h2>
+					<p class="mt-4" id="bio" style="font-family: 'Lato', sans-serif;line-height: 1.7;font-size: 1.3rem;"><em>
+					SreyNy is a Cambodian based Freelance Makeup Artist.
+					</em></p>
+				</h2>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- services  -->
+<section class="pt-5 pb-5" id='services' style="background-color: #fffafa;">
+	<div class="container">
+		<div class="col-md-12 text-center mb-4">
+			<h2 class="text-uppercase font-weight-bold" id="serviceH2"> 
+			<span class="eng-link">SERVICES</span>
+			<span class="khmer-link" >សេវាកម្ម​</span>
+		</h2>
+		</div>
+		<div class="row">
+			<div class="col-md-4 text-center"  id='serviceImage1'>
+				<img src="{{url_for('static', filename='images/makeup.png')}}">
+				<h4>
+					<span class="eng-link">MAKEUP</span>
+					<span class="khmer-link" >ផាត់មុខ</span>
+				</h4>
+				<p><em>For a wedding, photo shoot, a portrait, or just a night out, we will make you feel beautiful.</em></p>
+			</div>
+			<div class="col-md-4 text-center" id='serviceImage2'>
+				<img src="{{url_for('static', filename='images/hair.png')}}">
+				<h4>
+					<span class="eng-link">HAIRSTYLING</span>
+					<span class="khmer-link" >ស្ទីលម៉ូដសក់</span>
+				</h4>
+				<p><em>We can do anything from updos to long, flowing curls and everything in-between.</em></p>
+			</div>
+			<div class="col-md-4 text-center" id='serviceImage3'>
+				<img src="{{url_for('static', filename='images/beauty.png')}}">
+				<h4>
+					<span class="eng-link">BEAUTY BAR</span>
+					<span class="khmer-link">ធ្វើក្រចក កាត់សាច់ និងលាបថ្នាំក្រចក</span>
+
+				</h4>
+				<p><em>Our full service Beauty Bar has you covered. </em></p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- instagram gallery -->
+<section class="gallery-block compact-gallery pt-5 pb-5" style="background-color: #fffafa;">
+    <div class="container">
+        <div id='gallery'>
+        	<div class="col-md-12">
+            	<h2 class="text-uppercase text-center font-weight-bold"  id="galleryH2">
+					<span class="eng-link">Gallery</span>
+					<span class="khmer-link" >រូបថត</span>
+				</h2>
+			</div>
+			<div class="text-center pt-2" id="galleryUl">
+				<ul class="menu list-inline">
+	                <li class="list-inline-item" id="viewStyle">
+	                	<span class="eng-link">LATEST</span>
+						<span class="khmer-link" >ថ្មីបំផុត</span>
+	                </li>	 
+	                <li class="list-inline-item" id="weddingStyle">
+						<span class="eng-link">WEDDING</span>
+						<span class="khmer-link" >ពិធីមង្គលការ ផាត់មុខ</span>	                 	
+	                </li>
+	                       
+	                <li class="list-inline-item" id="eveningStyle">
+	                	<span class="eng-link">EVENING</span>
+						<span class="khmer-link" >ផាត់មុខចូលរួមកម្មវិធីផ្សេងៗ</span>
+	                </li>
+	                       
+	                <li class="list-inline-item" id="khmerStyle">
+	                	<a href="https://www.instagram.com/sreynymet/" target="_blank" style="text-decoration:none;color:inherit;">
+	                 		<span class="eng-link" >VIEW MORE</span>
+							<span class="khmer-link" >មើល​បន្ថែម​ទៀត</span>
+						</a>
+	                </li>
+               
+	            </ul>
+	        </div>
+	        <center><div class="loader"></div></center>
+	        <div class="instagram_feed">
+            	<div class="instagram-feed mt-4"></div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+{% endblock content %}
