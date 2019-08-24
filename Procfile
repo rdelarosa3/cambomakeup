@@ -1,1 +1,1 @@
-web: flask db upgrade; gunicorn run:blogsite --preload
+web: flask db upgrade; gunicorn run:app --preload
