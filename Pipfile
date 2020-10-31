@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-request = "*"
 flask = "*"
 flask-sqlalchemy = "*"
 flask-wtf = "*"
@@ -14,7 +13,6 @@ flask-bcrypt = "*"
 flask-login = "*"
 flask-mail = "*"
 pillow = "*"
-psycopg2 = "*"
 python-dotenv = "*"
 flask-migrate = "*"
 boto3 = "*"
