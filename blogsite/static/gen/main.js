@@ -149,6 +149,104 @@ $(function(){var $window=$(window),win_height_padded=$window.height()*1.1,isTouc
 $window.on('scroll',revealOnScroll);function revealOnScroll(){var scrolled=$window.scrollTop(),win_height_padded=$window.height()*1.1;$(".revealOnScroll:not(.animated)").each(function(){var $this=$(this),offsetTop=$this.offset().top;if(scrolled+win_height_padded>offsetTop){if($this.data('timeout')){window.setTimeout(function(){$this.addClass('animated '+$this.data('animation'));},parseInt($this.data('timeout'),10));}else{$this.addClass('animated '+$this.data('animation'));}}});$(".revealOnScroll.animated").each(function(index){var $this=$(this),offsetTop=$this.offset().top;if(scrolled+win_height_padded<offsetTop){$(this).removeClass('animated fadeInUp flipInX lightSpeedIn bounceIn slideInLeft slideInRight fadeInLeft fadeInRight')}});}
 revealOnScroll();});$(".lang").click(function(){$(".khmer-link").toggle();$(".eng-link").toggle();});$(document).on('click','[data-toggle="lightbox"]',function(event){event.preventDefault();$(this).ekkoLightbox();});$(document).ready(function(){addAnimationData('#aboutImage','fadeInLeft','1000');addAnimationData('#aboutText','fadeInRight','1100');addAnimationData('#galleryH2','fadeInUp','750');addAnimationData('#galleryUl','fadeInUp','800');addAnimationData('#serviceH2','fadeInUp','750');addAnimationData('#serviceImage1','bounceIn','1000');addAnimationData('#serviceImage2','bounceIn','1250');addAnimationData('#serviceImage3','bounceIn','1500');addAnimationData('#footerScroll','fadeInUp','1000');});const iOS=/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream;$(document).ready(function(){if(iOS){console.log('Apple Device');$('#pricingLink, #sideButton').removeAttr("data-toggle data-target");$('#pricingLink, #sideButton').click(function(){window.open('https://cambomakeup.setmore.com/services','_blank');return false;});}
 else{$('#pricingLink, #sideButton').click(function(){if($('#bookingFrame').attr("src")==""){$('#bookingFrame').attr("src","https://cambomakeup.setmore.com/services");}
-$("#bookingFrame").hide();$(".pricing-loader").fadeIn('slow');$(".pricing-loader").delay(1900).fadeOut();$("#bookingFrame").delay(2400).fadeIn('slow');});}});$('#resetBooking').click(function(){$('#bookingFrame').attr("src",$('#bookingFrame').attr("src"));});if(location.pathname==="/"||"homepage"){console.log(location.pathname);$("#floating-button").click(function(){$('html, body').animate({scrollTop:$("#about").offset().top},1500);});$("#galleryNav").click(function(event){event.preventDefault();$('html, body').animate({scrollTop:$("#gallery").offset().top},1500);});$("#servicesNav").click(function(event){event.preventDefault();$('html, body').animate({scrollTop:$("#services").offset().top},1500);});$(document).ready(function(){$(".khmer-link").toggle();$(".eng-link").toggle();});function galleryScroll(){let count=1000;for(var a=1;a<=$('#gallery img').length;a++){addAnimationData('#gal'+a.toString(),'bounceIn',count.toString());count+=250;}}
-function animateScroll(){$('html, body').animate({scrollTop:$("#serviceImage3").offset().top},500);$('html, body').animate({scrollTop:$("#gallery").offset().top},5000);}
-$(document).ready(function(){$(".instagram_feed").fadeOut("slow");$(".loader").delay(400).fadeIn('slow');$.instagramFeed({'username':'cambomakeup','container':".instagram-feed",'alt_tag':"cambodia makeup",'styling':false,'display_gallery':true,'items':18,'items_per_row':10,'margin':0});$(".loader").delay(4300).fadeOut();$(".instagram_feed").delay(5000).fadeIn('slow');setTimeout(galleryScroll,5200);});const links={'#weddingStyle':'khmerwedding','#eveningStyle':'eveningmakeup','#viewStyle':'cambomakeup'};$.each(links,function(key,value){$(key).click(function(){console.log(key+": "+value);$(".instagram_feed").fadeOut();$(".loader").delay(400).fadeIn('slow');$.instagramFeed({'username':value,'container':".instagram-feed",'alt_tag':"cambodia makeup",'styling':false,'display_gallery':true,'items':18,'items_per_row':10,'margin':0});$(".loader").delay(4300).fadeOut();$(".instagram_feed").delay(5000).fadeIn('slow');setTimeout(galleryScroll,5500);setTimeout(animateScroll,5500);});});}
+$("#bookingFrame").hide();$(".pricing-loader").fadeIn('slow');$(".pricing-loader").delay(1900).fadeOut();$("#bookingFrame").delay(2400).fadeIn('slow');});}});$('#resetBooking').click(function(){$('#bookingFrame').attr("src",$('#bookingFrame').attr("src"));});if (location.pathname === "/" || "homepage"){
+//*********************** Navbar Links Scrolling ***********************	
+	console.log(location.pathname);
+	// scroll effects for button
+	$("#floating-button").click(function() {
+		$('html, body').animate({
+			scrollTop: $("#about").offset().top
+		}, 1500);
+	});
+
+	// scroll effects for button
+	$("#galleryNav").click(function(event) {
+		event.preventDefault();
+		$('html, body').animate({
+			scrollTop: $("#gallery").offset().top
+		}, 1500);
+	});
+	// scroll effects for button
+	$("#servicesNav").click(function(event) {
+		event.preventDefault();
+		$('html, body').animate({
+			scrollTop: $("#services").offset().top
+		}, 1500);
+	});
+
+	// shift between languages 
+	$( document ).ready(function() {
+		$(".khmer-link").toggle();
+		$(".eng-link").toggle();
+	});
+
+//*********************** INSTAGRAM GALLERY SECTION ***********************
+	// instagram gallery scroll effect
+	function galleryScroll(){
+		let count = 1000;
+
+		for(var a=1; a <= $('#gallery img').length; a++){
+			addAnimationData('#gal'+a.toString(),'bounceIn',count.toString());
+			count+=250;
+		}
+	}
+
+	// force screen scroll to animate effect
+	function animateScroll(){
+		$('html, body').animate({
+			scrollTop: $("#serviceImage3").offset().top
+		},500);
+		$('html, body').animate({
+			scrollTop: $("#gallery").offset().top
+		},5000);
+	}
+
+	// instagram gallery
+	$(document).ready(function(){
+		$(".instagram_feed").fadeOut("slow");
+		$(".loader").delay(400).fadeIn('slow');
+		$.instagramFeed({
+			'username': '',
+			'tag': 'cambomakeup',
+			'container': ".instagram-feed",
+			'alt_tag': "cambodia makeup",
+			'styling': false,
+			'display_gallery': true,
+			'items': 18,
+			'items_per_row': 10,
+			'margin': 0
+		});
+		$(".loader").delay(4300).fadeOut();
+		$(".instagram_feed").delay(5000).fadeIn('slow');
+		setTimeout(galleryScroll,5200);
+	});
+
+	const links = {'#weddingStyle':'khmerwedding',
+		'#eveningStyle':'eveningmakeup',
+		'#viewStyle':'cambomakeup'
+	};
+
+	$.each( links, function( key, value ) {
+		$(key).click(function(){
+			console.log( key + ": " + value );
+			$(".instagram_feed").fadeOut();
+			$(".loader").delay(400).fadeIn('slow');
+			$.instagramFeed({
+				'username': '',
+				'tag': value,
+				'container': ".instagram-feed",
+				'alt_tag': "cambodia makeup",
+				'styling': false,
+				'display_gallery': true,
+				'items': 18,
+				'items_per_row': 10,
+				'margin': 0
+			});
+			$(".loader").delay(4300).fadeOut();
+			$(".instagram_feed").delay(5000).fadeIn('slow');
+			setTimeout(galleryScroll,5500);
+			setTimeout(animateScroll,5500);
+		});
+	});
+//*********************END INSTAGRAM GALLERY SECTION ***********************
+}
