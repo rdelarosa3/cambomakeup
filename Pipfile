@@ -26,6 +26,7 @@ django-htmlmin = "*"
 flask-caching = "*"
 gunicorn = "*"
 email-validator = "*"
+jsmin = "*"
 
 [requires]
 python_version = "3.7"
