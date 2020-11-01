@@ -30,7 +30,7 @@
       return escape_map[char];
     });
   }
-  $.instagramFeed = function (options) {
+  $.instagramFeed = function (opts) {
     var options = $.fn.extend({}, defaults, opts);
     if (options.username == "" && options.tag == "") {
       console.error("Instagram Feed: Error, no username or tag found.");
