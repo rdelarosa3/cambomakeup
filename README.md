@@ -70,4 +70,5 @@ git clone git@github.com:rdelarosa3/cambomakeup.git
   2. Integration of AWS S3 for remote file storage
   3. Integration of Setmore booking system.
   4. UX/UI design using JS, CSS, JQuery, and Bootstrap library
+  5. Implementation of Instagram gallery through AJAX and CORS anywhere without API 
 </details>
