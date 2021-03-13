@@ -43,18 +43,21 @@ git clone git@github.com:rdelarosa3/cambomakeup.git
 ```
 
 <p>2. Initialize and activate a virtualenv: </p>
-  ```
+
+  ```bash
   $ virtualenv --no-site-packages env
   $ source env/bin/activate
   ```
 
 <p>3. Install the dependencies: </p>
-  ```
+
+  ```bash
   $ pip install -r requirements.txt
   ```
 
 <p>5. Run the development server: </p>
-  ```
+
+  ```bash
   $ python app.py
   ```
 
