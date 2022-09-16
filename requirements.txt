@@ -38,7 +38,7 @@ itsdangerous==1.1.0
 jinja2==2.10
 jmespath==0.9.3
 jsonschema==2.6.0
-mako==1.0.7
+mako==1.2.2
 markupsafe==1.1.1
 pathspec==0.5.5
 pillow==5.4.1
